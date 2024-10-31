@@ -100,7 +100,7 @@ func MergeSort(l []int32, tempo time.Duration) {
 
 func main() {
 
-	lista := CriarLista(100)
+	lista := CriarLista(200)
 	RandomizarLista(lista)
 
 	fmt.Println(lista)
@@ -116,19 +116,44 @@ func main() {
 	rl.InitWindow(TAMANHO_LARGURA, TAMANHO_ALTURA, "asd")
 	var posx, posy, wid, hei int32 = 0, 0, 0, 0
 	contador := 0
+	opcao := 1
 	for !rl.WindowShouldClose() {
+
+		if rl.IsKeyPressed(rl.KeyOne) {
+			opcao = 1
+		} else if rl.IsKeyPressed(rl.KeyTwo) {
+			opcao = 2
+		} else if rl.IsKeyPressed(rl.KeyThree) {
+			opcao = 3
+		}
 
 		if rl.IsKeyPressed(rl.KeyR) {
 			RandomizarLista(lista)
 			go func() {
 				time.Sleep(time.Millisecond * 100)
 				fmt.Println("comecou sort")
-				MergeSort(lista, time.Nanosecond*10000000)
+				switch opcao {
+				case 1:
+					BubbleSort(lista, time.Nanosecond*1000000)
+				case 2:
+					GnomeSort(lista, time.Nanosecond*1000000)
+				case 3:
+					MergeSort(lista, time.Nanosecond*1000000)
+				}
 				fmt.Println("terminou sort")
 			}()
 		}
 
 		rl.BeginDrawing()
+
+		switch opcao {
+		case 1:
+			rl.DrawText("bubble", 10, 30, 20, rl.White)
+		case 2:
+			rl.DrawText("gnome", 10, 30, 20, rl.White)
+		case 3:
+			rl.DrawText("merge", 10, 30, 20, rl.White)
+		}
 
 		rl.ClearBackground(rl.Black)
 
