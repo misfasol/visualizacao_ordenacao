@@ -28,7 +28,11 @@ func CriarLista(n int) []int32 {
 }
 
 func Swap(a, b *int32) {
-
+	if *a != *b {
+		(*a) ^= (*b)
+		(*b) ^= (*a)
+		(*a) ^= (*b)
+	}
 }
 
 func Sorted(l []int32) bool {
@@ -40,17 +44,53 @@ func Sorted(l []int32) bool {
 	return true
 }
 
-func Bubble(l []int32) {
-	time.Sleep(time.Second)
+func BubbleSort(l []int32) {
 	for i := range len(l) {
 		for j := range len(l) - i - 1 {
 			if l[j] > l[j+1] {
-				temp := l[j]
-				l[j] = l[j+1]
-				l[j+1] = temp
+				Swap(&l[j], &l[j+1])
 			}
 			time.Sleep(time.Millisecond)
 		}
+	}
+}
+
+func GnomeSort(l []int32) {
+	pos := 0
+	tamanho := len(l)
+	for pos < tamanho {
+		time.Sleep(time.Millisecond)
+		if pos == 0 || l[pos] >= l[pos-1] {
+			pos++
+		} else {
+			Swap(&l[pos], &l[pos-1])
+			pos--
+		}
+	}
+}
+
+func MergeSort(l []int32) {
+	if len(l) <= 1 {
+		return
+	}
+	MergeSort(l[:len(l)/2])
+	MergeSort(l[len(l)/2:])
+	aux := make([]int32, len(l))
+	ie, id, i := 0, len(l)/2, 0
+	for ie < len(l)/2 || id < len(l) {
+		time.Sleep(time.Millisecond * 10)
+		if ie < len(l)/2 && (id >= len(l) || l[ie] <= l[id]) {
+			aux[i] = l[ie]
+			ie++
+		} else {
+			aux[i] = l[id]
+			id++
+		}
+		i++
+	}
+	for i := range l {
+		l[i] = aux[i]
+		time.Sleep(time.Millisecond * 10)
 	}
 }
 
@@ -59,7 +99,13 @@ func main() {
 	lista := CriarLista(100)
 
 	fmt.Println(lista)
-	go Bubble(lista)
+
+	go func() {
+		time.Sleep(time.Second)
+		fmt.Println("comecou sort")
+		MergeSort(lista)
+		fmt.Println("terminou sort")
+	}()
 
 	rl.SetTargetFPS(60)
 	rl.InitWindow(TAMANHO_LARGURA, TAMANHO_ALTURA, "asd")
