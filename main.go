@@ -98,6 +98,62 @@ func MergeSort(l []int32, tempo time.Duration) {
 	}
 }
 
+// func QuickSort(l []int32, tempo time.Duration) {
+// 	if len(l) < 2 {
+// 		return
+// 	}
+// 	pivo := l[len(l)/2]
+// 	Swap(&l[len(l)/2], &l[len(l)-1])
+// 	ie, id := 0, len(l)-2
+// 	for ie < id {
+// 		for l[ie] < pivo {
+// 			ie++
+// 		}
+// 		for l[id] > pivo {
+// 			id--
+// 		}
+// 		if id <= ie {
+// 			Swap(&l[ie], &l[id])
+// 			ie++
+// 			id--
+// 		}
+// 		time.Sleep(tempo)
+// 	}
+// 	if id > 0 {
+// 		QuickSort(l[:id+1], tempo)
+// 	}
+// 	if ie < len(l) {
+// 		QuickSort(l[id:], tempo)
+// 	}
+// }
+
+func QuickSort(arr []int32, low int32, high int32, tempo time.Duration) {
+	if low < high {
+		pi := Partion(arr, low, high, tempo)
+
+		// Recursively sort elements before partition and after partition
+		QuickSort(arr, low, pi-1, tempo)
+		QuickSort(arr, pi+1, high, tempo)
+	}
+}
+
+func Partion(arr []int32, low int32, high int32, tempo time.Duration) int32 {
+	pivot := arr[high]
+	i := low - 1
+
+	for j := low; j < high; j++ {
+		time.Sleep(tempo)
+		if arr[j] < pivot {
+			i++
+
+			arr[i], arr[j] = arr[j], arr[i]
+		}
+	}
+
+	arr[i+1], arr[high] = arr[high], arr[i+1]
+	return i + 1
+}
+
 func main() {
 
 	lista := CriarLista(200)
@@ -125,6 +181,8 @@ func main() {
 			opcao = 2
 		} else if rl.IsKeyPressed(rl.KeyThree) {
 			opcao = 3
+		} else if rl.IsKeyPressed(rl.KeyFour) {
+			opcao = 4
 		}
 
 		if rl.IsKeyPressed(rl.KeyR) {
@@ -139,6 +197,8 @@ func main() {
 					GnomeSort(lista, time.Nanosecond*1000000)
 				case 3:
 					MergeSort(lista, time.Nanosecond*1000000)
+				case 4:
+					QuickSort(lista, 0, int32(len(lista)-1), time.Nanosecond*5000000)
 				}
 				fmt.Println("terminou sort")
 			}()
@@ -153,6 +213,8 @@ func main() {
 			rl.DrawText("gnome", 10, 30, 20, rl.White)
 		case 3:
 			rl.DrawText("merge", 10, 30, 20, rl.White)
+		case 4:
+			rl.DrawText("quick", 10, 30, 20, rl.White)
 		}
 
 		rl.ClearBackground(rl.Black)
