@@ -1,4 +1,4 @@
-#Visualização de Algoritmos de Ordenação
+# Visualização de Algoritmos de Ordenação
 
 Para rodar o código é necessário ter go instalado, para executar digite `go run .` ou para compilar digite `go build .`
 
